@@ -114,4 +114,62 @@ The project demonstrates the following:
 
 ![prediction](https://github.com/user-attachments/assets/b22a9006-88c6-4da3-b520-0f6cd832f904)
 
+## Using Postman to Test the API
+
+Step 1: Start the Flask API Locally
+Make sure your Flask application is running. If you're running it locally, open your terminal, navigate to your project folder, and run the following command:
+
+bash
+Copy code
+python app.py
+By default, Flask runs on http://127.0.0.1:5000/.
+
+Step 2: Open Postman
+Open Postman on your computer. If you don't have it installed, you can download it from Postman's official website.
+
+Step 3: Set Up a POST Request in Postman
+URL: In Postman, enter the following URL (assuming you're running Flask locally):
+
+arduino
+Copy code
+http://127.0.0.1:5000/predict
+HTTP Method: Select POST from the dropdown list of HTTP methods.
+
+Request Body:
+
+Switch to the Body tab in Postman.
+Choose raw and then select JSON from the dropdown.
+In the text area, enter the data in JSON format that matches the model's expected input. Here's an example:
+json
+Copy code
+{
+  "Vehicle Type": "Truck",
+  "Weather Conditions": "Rainy",
+  "Traffic Conditions": "Heavy"
+}
+Send the Request:
+
+Click on the Send button.
+Step 4: View the Response
+After sending the request, Postman will display the response in the Response section at the bottom.
+
+If the prediction is successful, the response should look something like this:
+
+json
+Copy code
+{
+  "prediction": "Delayed"
+}
+If there's an error (e.g., missing columns or bad input), the response might contain an error message like this:
+
+json
+Copy code
+{
+  "error": "Missing required data"
+}
+Additional Tips for Postman
+Authorization: If you are deploying the API with authentication, you can set headers for authorization in Postman (e.g., API keys or OAuth tokens).
+Save Requests: You can save your request in Postman for reuse by clicking on Save.
+Environment Variables: You can create environments in Postman to store different values (like API URLs) for easy switching between local and production environments.
+
 
