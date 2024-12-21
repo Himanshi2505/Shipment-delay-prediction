@@ -16,7 +16,7 @@ Follow these steps to set up the project:
 1. Clone this repository:
    ```bash
    git clone https://github.com/Himanshi2505/Shipment-delay-prediction.git
-   cd shipment-delay-prediction
+   cd Shipment-delay-prediction
    ```
 
 2. Create a virtual environment and activate it:
