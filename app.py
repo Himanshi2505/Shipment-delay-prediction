@@ -1,41 +1,43 @@
-from flask import Flask, request, jsonify
 import joblib
 import pandas as pd
+from flask import Flask, request, jsonify
 
-# Load the trained model
-model = joblib.load('logistic_regression_model.pkl')  # Change this to the model you prefer
-
-# Initialize Flask app
 app = Flask(__name__)
 
-# Endpoint to predict shipment delay
+# Load model, scaler, and model columns
+model = joblib.load('shipment_delay_model.pkl')
+scaler = joblib.load('scaler.pkl')
+model_columns = joblib.load('model_columns.pkl')
+
 @app.route('/predict', methods=['POST'])
-def predict_delay():
-    data = request.get_json(force=True)
-    
-    # Extract shipment data
-    shipment_data = {
-        'Origin': data['Origin'],
-        'Destination': data['Destination'],
-        'Vehicle Type': data['Vehicle Type'],
-        'Distance (km)': data['Distance (km)'],
-        'Weather Conditions': data['Weather Conditions'],
-        'Traffic Conditions': data['Traffic Conditions'],
-    }
+def predict():
+    try:
+        # Get input data from the request
+        data = request.get_json()
 
-    # Convert the input data to a DataFrame
-    df = pd.DataFrame([shipment_data])
+        # Create a DataFrame from the incoming JSON data
+        input_data = pd.DataFrame(data, index=[0])
 
-    # Perform any necessary preprocessing here (e.g., encoding categorical variables)
-    # Example: df['Weather Conditions'] = df['Weather Conditions'].map({'Clear': 0, 'Rain': 1, 'Fog': 2})
-    # Repeat for other categorical columns
+        # Ensure that input_data has all the required columns (add missing columns as 0)
+        missing_cols = set(model_columns) - set(input_data.columns)
+        for col in missing_cols:
+            input_data[col] = 0
 
-    # Prediction
-    prediction = model.predict(df)
-    result = 'Delayed' if prediction[0] == 1 else 'On Time'
+        # Reorder the columns to match the model's expected order
+        input_data = input_data[model_columns]
 
-    return jsonify({'Prediction': result})
+        # Scale the input data
+        input_data_scaled = scaler.transform(input_data)
 
-# Run the Flask app
+        # Make a prediction
+        prediction = model.predict(input_data_scaled)
+
+        # Return the result as a JSON response
+        result = 'Delayed' if prediction[0] == 1 else 'On Time'
+        return jsonify({'prediction': result})
+
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
 if __name__ == '__main__':
     app.run(debug=True)

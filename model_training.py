@@ -1,110 +1,74 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import classification_report, accuracy_score, precision_score, recall_score, f1_score
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 import joblib
 
-# Load cleaned data
-df = pd.read_csv('shipment_data_prepared.csv')
+# Load the cleaned dataset
+df = pd.read_csv('shipment_data_cleaned.csv')
 
-# Drop non-numeric columns like 'Shipment ID', 'Origin', 'Destination', etc.
-# These columns are not useful for model training
-df = df.drop(columns=['Shipment ID', 'Origin', 'Destination', 'Shipment Date', 'Planned Delivery Date', 'Actual Delivery Date'])
+# Load the saved model columns and scaler
+model_columns = joblib.load('model_columns.pkl')
+scaler = joblib.load('scaler.pkl')
 
-# Split data into features and target
-X = df.drop(columns=['Delayed'])  # Features
-y = df['Delayed'].map({'Yes': 1, 'No': 0})  # Target
+# Ensure the same columns are present in the dataset
+X = df[model_columns]
 
-# Train-test split
+# Target variable (Delayed)
+y = df['Delayed'].map({'Yes': 1, 'No': 0})  # Convert 'Yes'/'No' to 1/0
+
+# Split data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Define models to experiment with
-models = {
-    'Logistic Regression': LogisticRegression(random_state=42, max_iter=1000),
-    'Decision Tree': DecisionTreeClassifier(random_state=42),
-    'Random Forest': RandomForestClassifier(random_state=42)
-}
+# Standardize the data (using the saved scaler)
+X_train = scaler.transform(X_train)
+X_test = scaler.transform(X_test)
 
-# Train and evaluate each model
-for model_name, model in models.items():
-    print(f"Training {model_name}...")
-    model.fit(X_train, y_train)
-    y_pred = model.predict(X_test)
-    
-    # Evaluate performance
-    accuracy = accuracy_score(y_test, y_pred)
-    precision = precision_score(y_test, y_pred)
-    recall = recall_score(y_test, y_pred)
-    f1 = f1_score(y_test, y_pred)
-    
-    print(f"Results for {model_name}:")
-    print(f"Accuracy: {accuracy:.4f}")
-    print(f"Precision: {precision:.4f}")
-    print(f"Recall: {recall:.4f}")
-    print(f"F1 Score: {f1:.4f}")
-    print("Classification Report:\n", classification_report(y_test, y_pred))
-    print("-" * 50)
-    
-    # Save the model
-    model_filename = f"{model_name.replace(' ', '_').lower()}_model.pkl"
-    joblib.dump(model, model_filename)
-    print(f"Model saved as '{model_filename}'.")
+# Train and evaluate Logistic Regression model
+log_reg_model = LogisticRegression(max_iter=1000)
+log_reg_model.fit(X_train, y_train)
 
+# Predictions
+y_pred_log_reg = log_reg_model.predict(X_test)
 
+# Evaluate Logistic Regression performance
+print("Logistic Regression Model Performance:")
+print(f"Accuracy: {accuracy_score(y_test, y_pred_log_reg):.4f}")
+print(f"Precision: {precision_score(y_test, y_pred_log_reg):.4f}")
+print(f"Recall: {recall_score(y_test, y_pred_log_reg):.4f}")
+print(f"F1 Score: {f1_score(y_test, y_pred_log_reg):.4f}")
 
+# Train and evaluate Decision Tree model
+dt_model = DecisionTreeClassifier(random_state=42)
+dt_model.fit(X_train, y_train)
 
+# Predictions
+y_pred_dt = dt_model.predict(X_test)
 
+# Evaluate Decision Tree performance
+print("\nDecision Tree Model Performance:")
+print(f"Accuracy: {accuracy_score(y_test, y_pred_dt):.4f}")
+print(f"Precision: {precision_score(y_test, y_pred_dt):.4f}")
+print(f"Recall: {recall_score(y_test, y_pred_dt):.4f}")
+print(f"F1 Score: {f1_score(y_test, y_pred_dt):.4f}")
 
+# Train and evaluate Random Forest model
+rf_model = RandomForestClassifier(random_state=42)
+rf_model.fit(X_train, y_train)
 
+# Predictions
+y_pred_rf = rf_model.predict(X_test)
 
-# import pandas as pd
-# from sklearn.model_selection import train_test_split
-# from sklearn.ensemble import RandomForestClassifier
-# from sklearn.linear_model import LogisticRegression
-# from sklearn.tree import DecisionTreeClassifier
-# from sklearn.metrics import classification_report, accuracy_score, precision_score, recall_score, f1_score
-# import joblib
+# Evaluate Random Forest performance
+print("\nRandom Forest Model Performance:")
+print(f"Accuracy: {accuracy_score(y_test, y_pred_rf):.4f}")
+print(f"Precision: {precision_score(y_test, y_pred_rf):.4f}")
+print(f"Recall: {recall_score(y_test, y_pred_rf):.4f}")
+print(f"F1 Score: {f1_score(y_test, y_pred_rf):.4f}")
 
-# # Load cleaned data
-# df = pd.read_csv('shipment_data_prepared.csv')
+# Save the best performing model (Random Forest, in this case)
+joblib.dump(rf_model, 'shipment_delay_model.pkl')
 
-# # Split data into features and target
-# X = df.drop(columns=['Delayed'])
-# y = df['Delayed'].map({'Yes': 1, 'No': 0})
-
-# # Train-test split
-# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# # Define models to experiment with
-# models = {
-#     'Logistic Regression': LogisticRegression(random_state=42, max_iter=1000),
-#     'Decision Tree': DecisionTreeClassifier(random_state=42),
-#     'Random Forest': RandomForestClassifier(random_state=42)
-# }
-
-# # Train and evaluate each model
-# for model_name, model in models.items():
-#     print(f"Training {model_name}...")
-#     model.fit(X_train, y_train)
-#     y_pred = model.predict(X_test)
-    
-#     # Evaluate performance
-#     accuracy = accuracy_score(y_test, y_pred)
-#     precision = precision_score(y_test, y_pred)
-#     recall = recall_score(y_test, y_pred)
-#     f1 = f1_score(y_test, y_pred)
-    
-#     print(f"Results for {model_name}:")
-#     print(f"Accuracy: {accuracy:.4f}")
-#     print(f"Precision: {precision:.4f}")
-#     print(f"Recall: {recall:.4f}")
-#     print(f"F1 Score: {f1:.4f}")
-#     print("Classification Report:\n", classification_report(y_test, y_pred))
-#     print("-" * 50)
-    
-#     # Save the model
-#     model_filename = f"{model_name.replace(' ', '_').lower()}_model.pkl"
-#     joblib.dump(model, model_filename)
-#     print(f"Model saved as '{model_filename}'.")
+print("\nModel training complete. Best performing model saved as 'shipment_delay_model.pkl'.")
