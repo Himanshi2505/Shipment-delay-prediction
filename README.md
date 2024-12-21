@@ -119,20 +119,21 @@ The project demonstrates the following:
 Step 1: Start the Flask API Locally
 Make sure your Flask application is running. If you're running it locally, open your terminal, navigate to your project folder, and run the following command:
 
-bash
-Copy code
+```bash
 python app.py
+```
 By default, Flask runs on http://127.0.0.1:5000/.
 
-Step 2: Open Postman
-Open Postman on your computer. If you don't have it installed, you can download it from Postman's official website.
+Step 2:
+Open Postman on your computer. You can download it from Postman's official website if you don't have it installed.
 
-Step 3: Set Up a POST Request in Postman
+Step 3:
+Set Up a POST Request in Postman
 URL: In Postman, enter the following URL (assuming you're running Flask locally):
-
-arduino
-Copy code
+```
 http://127.0.0.1:5000/predict
+
+```
 HTTP Method: Select POST from the dropdown list of HTTP methods.
 
 Request Body:
@@ -140,13 +141,22 @@ Request Body:
 Switch to the Body tab in Postman.
 Choose raw and then select JSON from the dropdown.
 In the text area, enter the data in JSON format that matches the model's expected input. Here's an example:
-json
+```json
 Copy code
 {
-  "Vehicle Type": "Truck",
-  "Weather Conditions": "Rainy",
-  "Traffic Conditions": "Heavy"
+ {
+    "Distance (km)": 1603,
+    "Vehicle Type_Lorry": false,
+    "Vehicle Type_Trailer": true,
+    "Vehicle Type_Truck": false,
+    "Weather Conditions_Fog": false,
+    "Weather Conditions_Rain": true,
+    "Weather Conditions_Storm": false,
+    "Traffic Conditions_Light": true,
+    "Traffic Conditions_Moderate": false
 }
+}
+```
 Send the Request:
 
 Click on the Send button.
@@ -155,18 +165,20 @@ After sending the request, Postman will display the response in the Response sec
 
 If the prediction is successful, the response should look something like this:
 
-json
+```json
 Copy code
 {
-  "prediction": "Delayed"
+  "prediction": "Yes"
 }
+```
 If there's an error (e.g., missing columns or bad input), the response might contain an error message like this:
 
-json
+```json
 Copy code
 {
   "error": "Missing required data"
 }
+```
 Additional Tips for Postman
 Authorization: If you are deploying the API with authentication, you can set headers for authorization in Postman (e.g., API keys or OAuth tokens).
 Save Requests: You can save your request in Postman for reuse by clicking on Save.
