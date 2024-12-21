@@ -112,5 +112,6 @@ The project demonstrates the following:
 2. A RESTful API was created for real-time predictions.
 3. Predictions are based on features like vehicle type, distance, weather, and traffic conditions.
 
-![prediction](https://github.com/user-attachments/assets/d8180166-79c9-440b-a42f-70f130d2d35b)
+![prediction](https://github.com/user-attachments/assets/b22a9006-88c6-4da3-b520-0f6cd832f904)
+
 
