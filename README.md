@@ -7,21 +7,7 @@ This repository contains a machine learning project to predict shipment delays b
 
 This project focuses on solving the problem of predicting whether a shipment will be delayed or delivered on time. Using machine learning models like Logistic Regression, Decision Tree, and Random Forest, we train and evaluate their performance to select the best-performing model for deployment.
 
-## Repository Structure
 
-```
-Shipment-delay-prediction/
-├── venv/                      # Virtual environment
-├── app.py                     # Flask API for predictions
-├── data_preparation.py        # Script for data preprocessing
-├── model_training.py          # Script for training and evaluating models
-├── requirements.txt           # Python dependencies
-├── scaler.pkl                 # Saved scaler for data standardization
-├── shipment_data.csv          # Raw dataset
-├── shipment_data_cleaned.csv  # Cleaned dataset
-├── model_columns.pkl          # Model input feature columns
-├── shipment_delay_model.pkl   # Saved Random Forest model
-```
 
 ## Setup Instructions
 
