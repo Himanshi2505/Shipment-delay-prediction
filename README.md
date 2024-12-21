@@ -15,7 +15,7 @@ Follow these steps to set up the project:
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/your-repo/shipment-delay-prediction.git
+   git clone https://github.com/Himanshi2505/Shipment-delay-prediction.git
    cd shipment-delay-prediction
    ```
 
