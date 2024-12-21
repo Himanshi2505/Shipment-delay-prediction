@@ -101,7 +101,7 @@ POST http://127.0.0.1:5000/predict
 ### Response:
 ```json
 {
-    "prediction": "Yes"
+    "prediction": "Delayed"
 }
 ```
 
@@ -112,7 +112,8 @@ The project demonstrates the following:
 2. A RESTful API was created for real-time predictions.
 3. Predictions are based on features like vehicle type, distance, weather, and traffic conditions.
 
-![prediction](https://github.com/user-attachments/assets/b22a9006-88c6-4da3-b520-0f6cd832f904)
+![prediction1](https://github.com/user-attachments/assets/d4d0931e-a772-413c-af1b-e381f5c703ed)
+
 
 ## Using Postman to Test the API
 
@@ -168,7 +169,7 @@ If the prediction is successful, the response should look something like this:
 ```json
 Copy code
 {
-  "prediction": "Yes"
+  "prediction": "Delayed"
 }
 ```
 If there's an error (e.g., missing columns or bad input), the response might contain an error message like this:
